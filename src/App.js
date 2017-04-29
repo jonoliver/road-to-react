@@ -31,9 +31,11 @@ const Button = ({ onClick, className = '', children }) =>
   </button>
 
 const DEFAULT_QUERY = 'redux';
+const DEFAULT_PAGE = 0;
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
+const PARAM_PAGE = 'page=';
 
 class App extends Component {
   constructor(props) {
@@ -67,12 +69,12 @@ class App extends Component {
 
   onSearchSubmit(event) {
     const { searchTerm } = this.state;
-    this.fetchSearchTopstories(searchTerm);
+    this.fetchSearchTopstories(searchTerm, DEFAULT_PAGE);
     event.preventDefault();
   }
 
-  fetchSearchTopstories(searchTerm) {
-    const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`
+  fetchSearchTopstories(searchTerm, page) {
+    const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`
 
     fetch(url)
       .then(response => response.json())
@@ -82,11 +84,12 @@ class App extends Component {
 
   componentDidMount() {
     const { searchTerm } = this.state;
-    this.fetchSearchTopstories(searchTerm);
+    this.fetchSearchTopstories(searchTerm, DEFAULT_PAGE);
   }
 
   render(){
     const { searchTerm, result } = this.state;
+    const page = (result && result.page) || 0;
     return(
       <div className="page">
         <div className="interactions">
@@ -100,6 +103,9 @@ class App extends Component {
           result &&
           <Table list={result.hits} onDismiss={this.onDismiss} />
         }
+        <div className="interactions">
+          <Button onClick={() => this.fetchSearchTopstories(searchTerm, page + 1)}>More</Button>
+        </div>
       </div>
     )
   }
