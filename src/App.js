@@ -1,25 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const list = [
-  {
-    title: 'Github',
-    url: 'https://github.com/jonoliver',
-    author: 'Jon Oliver',
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'Blog',
-    url: 'http://jonoliver.codes',
-    author: 'Jon Oliver',
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-];
-
 const isSearched = (searchTerm)  => (item) =>
   !searchTerm ||
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -52,37 +33,63 @@ const Button = ({ onClick, className = '', children }) =>
     {children}
   </button>
 
+const DEFAULT_QUERY = 'redux';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      list,
-      searchTerm: ''
+      result: null,
+      searchTerm: DEFAULT_QUERY
     };
 
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.setSearchTopstories = this.setSearchTopstories.bind(this);
+    this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
   }
 
   onDismiss(id){
     const isNotId = item => item.objectID !== id;
-    const newList = this.state.list.filter(isNotId)
-    this.setState({list: newList})
+    const updatedHits = this.state.result.hits.filter(isNotId);
+    this.setState({result: { ...this.state.result, hits: updatedHits }})
   }
 
   onSearchChange(event){
     this.setState({ searchTerm: event.target.value });
   }
 
+  setSearchTopstories(result) {
+    this.setState({ result });
+  }
+
+  fetchSearchTopstories(searchTerm) {
+    const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`
+
+    fetch(url)
+      .then(response => response.json())
+      .then(result => this.setSearchTopstories(result))
+      .catch((error) => error)
+  }
+
+  componentDidMount() {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopstories(searchTerm);
+  }
+
   render(){
-    const { searchTerm, list } = this.state;
+    const { searchTerm, result } = this.state;
+    if (!result) { return null; }
     return(
       <div className="page">
         <div className="interactions">
           <Search value={searchTerm} onChange={this.onSearchChange}><span>Search</span></Search>
         </div>
-        <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss} />
+        <Table list={result.hits} pattern={searchTerm} onDismiss={this.onDismiss} />
       </div>
     )
   }
