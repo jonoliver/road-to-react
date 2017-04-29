@@ -48,12 +48,14 @@ class App extends Component {
     this.setState({ searchTerm: event.target.value });
   }
 
-  render = () =>
+  render(){
+    const { searchTerm, list } = this.state;
+    return(
     <div className="App">
       <form action="">
         <input type="text" onChange={this.onSearchChange} />
       </form>
-      { this.state.list.filter(isSearched(this.state.searchTerm)).map(item =>
+      { list.filter(isSearched(searchTerm)).map(item =>
         <div id='list' key={ item.objectID }>
           <a href="{ item.url }">{ item.title }</a>
           <span>{ item.author }</span>
@@ -66,6 +68,8 @@ class App extends Component {
         </div>
       )}
     </div>
+    )
+  }
 }
 
 export default App;
