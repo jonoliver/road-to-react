@@ -83,13 +83,15 @@ class App extends Component {
 
   render(){
     const { searchTerm, result } = this.state;
-    if (!result) { return null; }
     return(
       <div className="page">
         <div className="interactions">
           <Search value={searchTerm} onChange={this.onSearchChange}><span>Search</span></Search>
         </div>
-        <Table list={result.hits} pattern={searchTerm} onDismiss={this.onDismiss} />
+        {
+          result &&
+          <Table list={result.hits} pattern={searchTerm} onDismiss={this.onDismiss} />
+        }
       </div>
     )
   }
