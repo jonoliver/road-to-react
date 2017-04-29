@@ -13,7 +13,7 @@ const Table = ({ list, onDismiss }) =>
     { list.map(item =>
       <div id='list' key={ item.objectID } className='table-row'>
         <span className='title'>
-          <a href="{ item.url }">{ item.title }</a>
+          <a href={ item.url }>{ item.title }</a>
         </span>
         <span className='author'>{ item.author }</span>
         <span>{ item.num_comments }</span>
