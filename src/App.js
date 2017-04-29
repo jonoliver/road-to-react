@@ -32,10 +32,12 @@ const Button = ({ onClick, className = '', children }) =>
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_PAGE = 0;
+const DEFAULT_HPP = 30;
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
+const PARAM_HPP = 'hitsPerPage=';
 
 class App extends Component {
   constructor(props) {
@@ -79,7 +81,7 @@ class App extends Component {
   }
 
   fetchSearchTopstories(searchTerm, page) {
-    const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`
+    const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
 
     fetch(url)
       .then(response => response.json())
