@@ -24,40 +24,31 @@ const isSearched = (searchTerm)  => (item) =>
   !searchTerm ||
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-function Search({ value, onChange, children }) {
-  return(
-    <form>
-      {children}
-      <input type="text" value={value} onChange={onChange} />
-    </form>
-  )
-}
+const Search = ({ value, onChange, children }) =>
+  <form>
+    {children}
+    <input type="text" value={value} onChange={onChange} />
+  </form>
 
-function Table({ list, pattern, onDismiss }) {
-  return(
-    <div>
-      { list.filter(isSearched(pattern)).map(item =>
-        <div id='list' key={ item.objectID }>
-          <a href="{ item.url }">{ item.title }</a>
-          <span>{ item.author }</span>
-          <span>{ item.num_comments }</span>
-          <span>{ item.points }</span>
-          <span>
-            <Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button>
-          </span>
-        </div>
-      )}
-    </div>
-  )
-}
+const Table = ({ list, pattern, onDismiss }) =>
+  <div>
+    { list.filter(isSearched(pattern)).map(item =>
+      <div id='list' key={ item.objectID }>
+        <a href="{ item.url }">{ item.title }</a>
+        <span>{ item.author }</span>
+        <span>{ item.num_comments }</span>
+        <span>{ item.points }</span>
+        <span>
+          <Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button>
+        </span>
+      </div>
+    )}
+  </div>
 
-function Button({ onClick, className = '', children }){
-  return (
-    <button onClick={onClick} className={className} type="button">
-      {children}
-    </button>
-  );
-}
+const Button = ({ onClick, className = '', children }) =>
+  <button onClick={onClick} className={className} type="button">
+    {children}
+  </button>
 
 class App extends Component {
   constructor(props) {
