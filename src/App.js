@@ -24,8 +24,7 @@ const isSearched = (searchTerm)  => (item) =>
   !searchTerm ||
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-function Search(props) {
-  const { value, onChange, children } = props;
+function Search({ value, onChange, children }) {
   return(
     <form>
       {children}
@@ -34,8 +33,7 @@ function Search(props) {
   )
 }
 
-function Table(props) {
-  const { list, pattern, onDismiss } = props;
+function Table({ list, pattern, onDismiss }) {
   return(
     <div>
       { list.filter(isSearched(pattern)).map(item =>
@@ -53,8 +51,7 @@ function Table(props) {
   )
 }
 
-function Button(props){
-  const { onClick, className = '', children } = props;
+function Button({ onClick, className = '', children }){
   return (
     <button onClick={onClick} className={className} type="button">
       {children}
