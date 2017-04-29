@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const isSearched = (searchTerm)  => (item) =>
-  !searchTerm ||
-  item.title.toLowerCase().includes(searchTerm.toLowerCase());
-
-const Search = ({ value, onChange, children }) =>
-  <form>
+const Search = ({ value, onChange, onSubmit, children }) =>
+  <form onSubmit={onSubmit}>
     {children}
     <input type="text" value={value} onChange={onChange} />
+    <button type='submit'>{children}</button>
   </form>
 
-const Table = ({ list, pattern, onDismiss }) =>
+const Table = ({ list, onDismiss }) =>
   <div className='table'>
-    { list.filter(isSearched(pattern)).map(item =>
+    { list.map(item =>
       <div id='list' key={ item.objectID } className='table-row'>
         <span className='title'>
           <a href="{ item.url }">{ item.title }</a>
@@ -49,6 +46,7 @@ class App extends Component {
 
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.setSearchTopstories = this.setSearchTopstories.bind(this);
     this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
   }
@@ -65,6 +63,12 @@ class App extends Component {
 
   setSearchTopstories(result) {
     this.setState({ result });
+  }
+
+  onSearchSubmit(event) {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopstories(searchTerm);
+    event.preventDefault();
   }
 
   fetchSearchTopstories(searchTerm) {
@@ -86,11 +90,15 @@ class App extends Component {
     return(
       <div className="page">
         <div className="interactions">
-          <Search value={searchTerm} onChange={this.onSearchChange}><span>Search</span></Search>
+          <Search
+            value={searchTerm}
+            onChange={this.onSearchChange}
+            onSubmit={this.onSearchSubmit}
+            ><span>Search</span></Search>
         </div>
         {
           result &&
-          <Table list={result.hits} pattern={searchTerm} onDismiss={this.onDismiss} />
+          <Table list={result.hits} onDismiss={this.onDismiss} />
         }
       </div>
     )
