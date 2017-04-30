@@ -1,0 +1,35 @@
+exports[`test snapshots 1`] = `
+<div
+  className="page">
+  <div
+    className="interactions">
+    <form
+      onSubmit={[Function]}>
+      <span>
+        Search
+      </span>
+      <input
+        onChange={[Function]}
+        type="text"
+        value="redux" />
+      <button
+        type="submit">
+        <span>
+          Search
+        </span>
+      </button>
+    </form>
+  </div>
+  <div
+    className="table" />
+  <div
+    className="interactions">
+    <button
+      className=""
+      onClick={[Function]}
+      type="button">
+      More
+    </button>
+  </div>
+</div>
+`;
