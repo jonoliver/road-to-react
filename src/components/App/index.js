@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+
+import Table from '../Table'
+import Button from '../Button'
+
 import {
   DEFAULT_QUERY,
   DEFAULT_PAGE,
@@ -21,28 +25,6 @@ const Search = ({ value, onChange, onSubmit, children }) =>
     <button type='submit'>{children}</button>
   </form>
 
-const Table = ({ list, onDismiss }) =>
-  <div className='table'>
-    { list.map(item =>
-      <div id='list' key={ item.objectID } className='table-row'>
-        <span className='title'>
-          <a href={ item.url }>{ item.title }</a>
-        </span>
-        <span className='author'>{ item.author }</span>
-        <span>{ item.num_comments }</span>
-        <span>{ item.points }</span>
-        <span>
-          <Button onClick={() => onDismiss(item.objectID)} className='button-inline'>Dismiss</Button>
-        </span>
-      </div>
-    )}
-  </div>
-
-const Button = ({ onClick, className = '', children }) =>
-  <button onClick={onClick} className={className} type="button">
-    {children}
-  </button>
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -54,22 +36,11 @@ class App extends Component {
       isLoading: false
     };
 
-    this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.needsToSearchTopstories = this.needsToSearchTopstories.bind(this);
     this.setSearchTopstories = this.setSearchTopstories.bind(this);
     this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
-  }
-
-  onDismiss(id){
-    const { searchKey, results } = this.state;
-    const { hits, page } = results[searchKey];
-    const isNotId = item => item.objectID !== id;
-    const updatedHits = hits.filter(isNotId);
-    this.setState({
-      results: { ...results, [searchKey]: { hits: updatedHits, page } }
-    });
   }
 
   onSearchChange(event){
@@ -122,7 +93,6 @@ class App extends Component {
   render(){
     const { searchTerm, results, searchKey, isLoading } = this.state;
     const page = (results && results[searchKey] && results[searchKey].page) || 0;
-    const list = (results && results[searchKey] && results[searchKey].hits) || [];
     return(
       <div className="page">
         <div className="interactions">
@@ -132,7 +102,7 @@ class App extends Component {
             onSubmit={this.onSearchSubmit}
             ><span>Search</span></Search>
         </div>
-        <Table list={list} onDismiss={this.onDismiss} />
+        <Table searchKey={searchKey} results={results} />
         <div className="interactions">
           {
             isLoading
@@ -146,5 +116,3 @@ class App extends Component {
 }
 
 export default App;
-
-export { Button, Search, Table }
