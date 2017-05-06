@@ -9,9 +9,7 @@ import {
   PARAM_SEARCH,
   PARAM_PAGE,
   PARAM_HPP,
-} from './constants/';
-
-import './App.css';
+} from '../../constants/';
 
 const Loading = () =>
   <div>Loading...</div>
