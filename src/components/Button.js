@@ -5,4 +5,13 @@ const Button = ({ onClick, className = '', children }) =>
     {children}
   </button>
 
+const Loading = () =>
+  <div>Loading...</div>
+
+const WithLoading = (Component) => ({isLoading, ...rest}) =>
+  isLoading ? <Loading /> : <Component {...rest} />
+
+const ButtonWithLoading = WithLoading(Button)
+
 export default Button;
+export { ButtonWithLoading };

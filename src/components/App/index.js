@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Table from '../Table'
-import Button from '../Button'
+import { ButtonWithLoading } from '../Button'
 
 import {
   DEFAULT_QUERY,
@@ -14,9 +14,6 @@ import {
   PARAM_PAGE,
   PARAM_HPP,
 } from '../../constants/';
-
-const Loading = () =>
-  <div>Loading...</div>
 
 const Search = ({ value, onChange, onSubmit, children }) =>
   <form onSubmit={onSubmit}>
@@ -105,9 +102,7 @@ class App extends Component {
         <Table searchKey={searchKey} results={results} />
         <div className="interactions">
           {
-            isLoading
-              ? <Loading />
-              : <Button onClick={() => this.fetchSearchTopstories(searchKey, page + 1)}>More</Button>
+            <ButtonWithLoading isLoading={isLoading} onClick={() => this.fetchSearchTopstories(searchKey, page + 1)}>More</ButtonWithLoading>
           }
         </div>
       </div>
